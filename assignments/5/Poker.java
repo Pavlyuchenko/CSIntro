@@ -11,7 +11,7 @@ class Poker extends ArrayManipulation {
 
     public static void main(String[] args) {
         // String[] cards = { "d2", "c3", "c4", "c5", "c6", "c7" };
-        String[] cards = { "c10", "d8", "c9", "dJ", "cQ", "cK", };
+        String[] cards = { "cK", "c10", "c8", "cQ", "dJ", "c9", };
         Poker p = new Poker();
 
         // Example to validate your implementation of method deleteCards
@@ -115,24 +115,61 @@ class Poker extends ArrayManipulation {
             return;
         }
         if (cardsOnHands.length == 0) {
-            for (int i = 0; i <= cardsAvailable.length - 5; i++) {
-                String[] cardsToDiscard = new String[i + 1];// { cardsAvailable[i] };
-                for (int j = 0; j < i + 1; j++) {
-                    cardsToDiscard[j] = cardsAvailable[j];
+            String[] discardedCards = new String[cardsAvailable.length - 4];
+            String[] copyCardsAvailable = new String[cardsAvailable.length];
+            for (int i = 0; i < cardsAvailable.length; i++) {
+                copyCardsAvailable[i] = cardsAvailable[i];
+            }
+
+            for (int i = 0; i < cardsAvailable.length - 4; i++) {
+                int smallest = 20;
+                int smallestIndex = 0;
+                for (int j = 0; j < copyCardsAvailable.length; j++) {
+                    String checkedCardValue = copyCardsAvailable[j].substring(1);
+                    checkedCardValue = checkedCardValue.replace("J", "11")
+                            .replace("Q", "12")
+                            .replace("K", "13")
+                            .replace("A", "14");
+                    int checkedCardValueInt = Integer.parseInt(checkedCardValue);
+
+                    if (checkedCardValueInt < smallest) {
+                        smallest = checkedCardValueInt;
+                        smallestIndex = j;
+                    }
                 }
 
-                String[] handCard = { cardsAvailable[i] };
-                possible_hands(discard_cards(cardsAvailable, cardsToDiscard), handCard);
+                discardedCards[i] = copyCardsAvailable[smallestIndex];
+
+                String[] handCard = { copyCardsAvailable[smallestIndex] };
+                possible_hands(discard_cards(copyCardsAvailable, discardedCards), handCard);
+
+                copyCardsAvailable = discard_cards(copyCardsAvailable, handCard);
             }
             return;
         } else {
             // The last added card to cardsOnHands
             String lastCard = cardsOnHands[cardsOnHands.length - 1];
             // The card we are checking now
-            String checkedCard = cardsAvailable[0];
+            int smallest = 20;
+            int smallestIndex = 0;
+            for (int i = 0; i < cardsAvailable.length; i++) {
+                String checkedCardValue = cardsAvailable[i].substring(1);
+                checkedCardValue = checkedCardValue.replace("J", "11")
+                        .replace("Q", "12")
+                        .replace("K", "13")
+                        .replace("A", "14");
+                int checkedCardValueInt = Integer.parseInt(checkedCardValue);
+
+                if (checkedCardValueInt < smallest) {
+                    smallest = checkedCardValueInt;
+                    smallestIndex = i;
+                }
+            }
+
+            String checkedCard = cardsAvailable[smallestIndex];
 
             // Cards we want to remove from cardsAvailable
-            String[] cardToDiscard = { cardsAvailable[0] };
+            String[] cardToDiscard = { cardsAvailable[smallestIndex] };
 
             // Array of new cardsOnHand
             String[] onHand = new String[cardsOnHands.length + 1];
@@ -140,7 +177,7 @@ class Poker extends ArrayManipulation {
                 onHand[i] = cardsOnHands[i];
             }
             // Append the card we are checking now to our hand
-            onHand[cardsOnHands.length] = cardsAvailable[0];
+            onHand[cardsOnHands.length] = cardsAvailable[smallestIndex];
 
             // Always call this
             possible_hands(discard_cards(cardsAvailable, cardToDiscard), cardsOnHands);
@@ -159,12 +196,15 @@ class Poker extends ArrayManipulation {
             }
 
             // Check for row
+
+            // TODO Must check if the previous cards are either ascending or descending
             String lastCardValue = lastCard.substring(1);
             lastCardValue = lastCardValue.replace("J", "11")
                     .replace("Q", "12")
                     .replace("K", "13")
                     .replace("A", "14");
             int lastCardValueInt = Integer.parseInt(lastCardValue);
+
             String checkedCardValue = checkedCard.substring(1);
             checkedCardValue = checkedCardValue.replace("J", "11")
                     .replace("Q", "12")
