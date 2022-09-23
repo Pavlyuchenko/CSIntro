@@ -45,121 +45,89 @@ public class RPSLO {
                 System.out.println("Computer play is O");
                 computerPlay = "o";
                 break;
-
             default:
                 System.out.println("Something unexpected happened.");
                 break;
         }
 
-        switch (userPlay) {
-            case "r":
-                switch (computerPlay) {
-                    case "r":
-                        tie();
-                        break;
-                    case "p":
-                        computerWin();
-                        break;
-                    case "s":
-                        userWins();
-                        break;
-                    case "l":
-                        userWins();
-                        break;
-                    case "o":
-                        computerWin();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "p":
-                switch (computerPlay) {
-                    case "r":
-                        userWins();
-                        break;
-                    case "p":
-                        tie();
-                        break;
-                    case "s":
-                        computerWin();
-                        break;
-                    case "l":
-                        computerWin();
-                        break;
-                    case "o":
-                        userWins();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "s":
-                switch (computerPlay) {
-                    case "r":
-                        computerWin();
-                        break;
-                    case "p":
-                        userWins();
-                        break;
-                    case "s":
-                        tie();
-                        break;
-                    case "l":
-                        userWins();
-                        break;
-                    case "o":
-                        computerWin();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "l":
-                switch (computerPlay) {
-                    case "r":
-                        computerWin();
-                        break;
-                    case "p":
-                        userWins();
-                        break;
-                    case "s":
-                        computerWin();
-                        break;
-                    case "l":
-                        tie();
-                        break;
-                    case "o":
-                        userWins();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "o":
-                switch (computerPlay) {
-                    case "r":
-                        userWins();
-                        break;
-                    case "p":
-                        computerWin();
-                        break;
-                    case "s":
-                        userWins();
-                        break;
-                    case "l":
-                        computerWin();
-                        break;
-                    case "o":
-                        tie();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                System.out.println("Invalid input (valid inputs: R, P, S, L, O)");
-                break;
+        if (userPlay.equals(computerPlay)) {
+            tie();
+        } else {
+            switch (userPlay) {
+                case "r":
+                    switch (computerPlay) {
+                        case "p":
+                        case "o":
+                            computerWin();
+                            break;
+                        case "s":
+                        case "l":
+                            userWins();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "p":
+                    switch (computerPlay) {
+                        case "r":
+                        case "o":
+                            userWins();
+                            break;
+                        case "s":
+                        case "l":
+                            computerWin();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "s":
+                    switch (computerPlay) {
+                        case "r":
+                        case "o":
+                            computerWin();
+                            break;
+                        case "p":
+                        case "l":
+                            userWins();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "l":
+                    switch (computerPlay) {
+                        case "r":
+                        case "s":
+                            computerWin();
+                            break;
+                        case "p":
+                        case "o":
+                            userWins();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "o":
+                    switch (computerPlay) {
+                        case "r":
+                        case "s":
+                            userWins();
+                            break;
+                        case "p":
+                        case "l":
+                            computerWin();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid input (valid inputs: R, P, S, L, O)");
+                    break;
+            }
         }
 
         // Write your code above
