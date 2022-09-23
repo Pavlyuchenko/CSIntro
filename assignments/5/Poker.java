@@ -1,7 +1,5 @@
 import java.util.Arrays;
 
-import javax.swing.UIDefaults.ActiveValue;
-
 class Poker extends ArrayManipulation {
     static String[] deck = { "cA", "cK", "cQ", "cJ", "c10", "c9", "c8", "c7", "c6", "c5", "c4", "c3", "c2", // Clovers
             "pA", "pK", "pQ", "pJ", "p10", "p9", "p8", "p7", "p6", "p5", "p4", "p3", "p2", // Pickes
@@ -12,7 +10,8 @@ class Poker extends ArrayManipulation {
     static String[][] opponent_combinations = new String[0][5];
 
     public static void main(String[] args) {
-        String[] cards = { "d2", "c3", "c4", "c5", "c6", "c7" };
+        // String[] cards = { "d2", "c3", "c4", "c5", "c6", "c7" };
+        String[] cards = { "c10", "d8", "c9", "dJ", "cQ", "cK", };
         Poker p = new Poker();
 
         // Example to validate your implementation of method deleteCards
@@ -26,6 +25,7 @@ class Poker extends ArrayManipulation {
         System.out.println("--------");
         // Example to validate your implementation of method possible_hands
         p.possible_hands(cards, new String[0]);
+        System.out.println(Arrays.deepToString(p.player_combinations));
         System.out.println("--------");
 
         // The following call must print the following combinations (order of
@@ -151,7 +151,6 @@ class Poker extends ArrayManipulation {
                     allCardsSameColor = false;
                     break;
                 }
-
             }
             // Check for possible flush
             if (allCardsSameColor) {
@@ -159,8 +158,22 @@ class Poker extends ArrayManipulation {
                 return;
             }
 
-            if (Character.getNumericValue(lastCard.charAt(1)) == Character.getNumericValue(checkedCard.charAt(1)) - 1
-                    || lastCard.charAt(1) == Character.getNumericValue(checkedCard.charAt(1)) + 1) {
+            // Check for row
+            String lastCardValue = lastCard.substring(1);
+            lastCardValue = lastCardValue.replace("J", "11")
+                    .replace("Q", "12")
+                    .replace("K", "13")
+                    .replace("A", "14");
+            int lastCardValueInt = Integer.parseInt(lastCardValue);
+            String checkedCardValue = checkedCard.substring(1);
+            checkedCardValue = checkedCardValue.replace("J", "11")
+                    .replace("Q", "12")
+                    .replace("K", "13")
+                    .replace("A", "14");
+            int checkedCardValueInt = Integer.parseInt(checkedCardValue);
+
+            if (lastCardValueInt == checkedCardValueInt - 1
+                    || lastCardValueInt == checkedCardValueInt + 1) {
                 possible_hands(discard_cards(cardsAvailable, cardToDiscard), onHand);
                 return;
             }
