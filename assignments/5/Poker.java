@@ -11,7 +11,7 @@ class Poker extends ArrayManipulation {
 
     public static void main(String[] args) {
         // String[] cards = { "d2", "c3", "c4", "c5", "c6", "c7" };
-        String[] cards = { "cK", "c10", "c8", "cQ", "dJ", "c9", };
+        String[] cards = { "pK", "c10", "h8", "hQ", "dJ", "c9", };
         Poker p = new Poker();
 
         // Example to validate your implementation of method deleteCards
@@ -102,11 +102,17 @@ class Poker extends ArrayManipulation {
         // Terminating conditions
         // Add to result
         if (cardsOnHands.length == 5) {
-            String[][] newPlayerCombinations = new String[Poker.player_combinations.length + 1][5];
+            String[][] newPlayerCombinations = new String[Poker.player_combinations.length + 2][5];
             for (int i = 0; i < Poker.player_combinations.length; i++) {
                 newPlayerCombinations[i] = Poker.player_combinations[i];
             }
+            String[] cardsOnHandsReversed = new String[5];
+            for (int i = 0; i < cardsOnHands.length; i++) {
+                cardsOnHandsReversed[i] = cardsOnHands[5 - i - 1];
+            }
+            newPlayerCombinations[newPlayerCombinations.length - 2] = cardsOnHandsReversed;
             newPlayerCombinations[newPlayerCombinations.length - 1] = cardsOnHands;
+
             Poker.player_combinations = newPlayerCombinations;
             return;
         }
@@ -198,6 +204,42 @@ class Poker extends ArrayManipulation {
             // Check for row
 
             // TODO Must check if the previous cards are either ascending or descending
+            int currentCard = Integer.parseInt(cardsOnHands[0].substring(1).replace("J", "11")
+                    .replace("Q", "12")
+                    .replace("K", "13")
+                    .replace("A", "14"));
+            boolean increasing = true;
+            boolean firstChecked = true;
+            for (int i = 1; i < cardsOnHands.length; i++) {
+                String checkedCardValue = cardsOnHands[i].substring(1);
+                checkedCardValue = checkedCardValue.replace("J", "11")
+                        .replace("Q", "12")
+                        .replace("K", "13")
+                        .replace("A", "14");
+                int checkedCardValueInt = Integer.parseInt(checkedCardValue);
+
+                if (firstChecked) {
+                    firstChecked = false;
+                    if (currentCard == checkedCardValueInt + 1) {
+                        increasing = false;
+                        currentCard = checkedCardValueInt;
+                    } else if (currentCard == checkedCardValueInt - 1) {
+                        increasing = true;
+                        currentCard = checkedCardValueInt;
+                    } else {
+                        return;
+                    }
+                } else {
+                    if (currentCard == checkedCardValueInt + 1 && !increasing) {
+                        currentCard = checkedCardValueInt;
+                    } else if (currentCard == checkedCardValueInt - 1 && increasing) {
+                        currentCard = checkedCardValueInt;
+                    } else {
+                        return;
+                    }
+                }
+            }
+
             String lastCardValue = lastCard.substring(1);
             lastCardValue = lastCardValue.replace("J", "11")
                     .replace("Q", "12")
