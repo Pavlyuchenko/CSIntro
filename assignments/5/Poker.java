@@ -11,7 +11,7 @@ class Poker extends ArrayManipulation {
 
     public static void main(String[] args) {
         // String[] cards = { "d2", "c3", "c4", "c5", "c6", "c7" };
-        String[] cards = { "pK", "c10", "h8", "hQ", "dJ", "c9", };
+        String[] cards = { "pK", "c10", "h8", "hQ", "dJ", "c9", "c7", "c6", "c5" };
         Poker p = new Poker();
 
         // Example to validate your implementation of method deleteCards
@@ -25,7 +25,6 @@ class Poker extends ArrayManipulation {
         System.out.println("--------");
         // Example to validate your implementation of method possible_hands
         p.possible_hands(cards, new String[0]);
-        System.out.println(Arrays.deepToString(p.player_combinations));
         System.out.println("--------");
 
         // The following call must print the following combinations (order of
@@ -102,15 +101,10 @@ class Poker extends ArrayManipulation {
         // Terminating conditions
         // Add to result
         if (cardsOnHands.length == 5) {
-            String[][] newPlayerCombinations = new String[Poker.player_combinations.length + 2][5];
+            String[][] newPlayerCombinations = new String[Poker.player_combinations.length + 1][5];
             for (int i = 0; i < Poker.player_combinations.length; i++) {
                 newPlayerCombinations[i] = Poker.player_combinations[i];
             }
-            String[] cardsOnHandsReversed = new String[5];
-            for (int i = 0; i < cardsOnHands.length; i++) {
-                cardsOnHandsReversed[i] = cardsOnHands[5 - i - 1];
-            }
-            newPlayerCombinations[newPlayerCombinations.length - 2] = cardsOnHandsReversed;
             newPlayerCombinations[newPlayerCombinations.length - 1] = cardsOnHands;
 
             Poker.player_combinations = newPlayerCombinations;
@@ -121,6 +115,10 @@ class Poker extends ArrayManipulation {
             return;
         }
         if (cardsOnHands.length == 0) {
+            for (int i = 0; i < cardsAvailable.length; i++) {
+                System.out.print(cardsAvailable[i].toString() + " -> ");
+            }
+            System.out.println();
             String[] discardedCards = new String[cardsAvailable.length - 4];
             String[] copyCardsAvailable = new String[cardsAvailable.length];
             for (int i = 0; i < cardsAvailable.length; i++) {
