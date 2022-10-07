@@ -10,8 +10,8 @@ class Poker extends ArrayManipulation {
     static String[][] opponent_combinations = new String[0][5];
 
     public static void main(String[] args) {
-        // String[] cards = { "d2", "c3", "c4", "c5", "c6", "c7" };
-        String[] cards = { "pK", "c10", "h8", "hQ", "dJ", "c9", "c7", "c6", "c5" };
+        String[] cards = { "c2", "c3", "c4", "c5", "c6", "c7" };
+        // String[] cards = { "pK", "c10", "h8", "hQ", "dJ", "c9", "c7", "c6", "c5" };
         Poker p = new Poker();
 
         // Example to validate your implementation of method deleteCards
@@ -38,15 +38,29 @@ class Poker extends ArrayManipulation {
         System.out.println("Player Combinations: " + Arrays.deepToString(Poker.player_combinations));
 
         // Example to validate your implementation of method possible_hands_opponent
+
+        /*
+         * String[] cardsOnCommunity = { "cA", "pQ", "c2", "c5", "p6" };
+         * String[] cardsAvailable = { "cA", "cK", "cQ", "cJ", "c10", "c9", "c8", "c7",
+         * "c6", "c5", "c3", "c2", "pA", "pK",
+         * "pQ", "pJ", "p10", "p9", "p8", "p6", "p5", "p4", "p3", "p2", "hA", "hK",
+         * "hQ", "hJ", "h10", "h9", "h8",
+         * "h7", "h6", "h5", "h4", "h3", "h2", "dA", "dK", "dQ", "dJ", "d10", "d9",
+         * "d8", "d7", "d6", "d5", "d4",
+         * "d3", "d2" };
+         */
+
         String[] cardsOnCommunity = { "c2", "c3", "c4" };
         String[] cardsAvailable = { "c2", "c3", "c4", "c5", "c6", "c7" };
+
         p.possible_hands_opponent(cardsAvailable, cardsOnCommunity, new String[0]);
         // The following call must print the following combinations (order of
         // combinations and/or elements inside the combinations do not matter):
         // "c2", "c3", "c4", "c5", "c6"
         // "c2", "c3", "c4", "c5", "c7"
         // "c2", "c3", "c4", "c6", "c7"
-        System.out.println(Arrays.deepToString(Poker.opponent_combinations));
+        System.out.println("Opponent Combinations: " + Arrays.deepToString(Poker.opponent_combinations));
+        System.out.println("Opponent Combinations length: " + Poker.opponent_combinations.length);
     }
 
     public String[] discard_cards(String[] initialCards, String[] cardsToDiscard) {
@@ -98,7 +112,6 @@ class Poker extends ArrayManipulation {
     public void possible_hands(String[] cardsAvailable, String[] cardsOnHands) {
         // Write your code below
 
-        // Terminating conditions
         // Add to result
         if (cardsOnHands.length == 5) {
             String[][] newPlayerCombinations = new String[Poker.player_combinations.length + 1][5];
@@ -110,70 +123,24 @@ class Poker extends ArrayManipulation {
             Poker.player_combinations = newPlayerCombinations;
             return;
         }
-        // Not a solution
+        // Everything done
         if (cardsAvailable.length == 0) {
             return;
         }
         if (cardsOnHands.length == 0) {
-            for (int i = 0; i < cardsAvailable.length; i++) {
-                System.out.print(cardsAvailable[i].toString() + " -> ");
-            }
-            System.out.println();
-            String[] discardedCards = new String[cardsAvailable.length - 4];
-            String[] copyCardsAvailable = new String[cardsAvailable.length];
-            for (int i = 0; i < cardsAvailable.length; i++) {
-                copyCardsAvailable[i] = cardsAvailable[i];
-            }
-
-            for (int i = 0; i < cardsAvailable.length - 4; i++) {
-                int smallest = 20;
-                int smallestIndex = 0;
-                for (int j = 0; j < copyCardsAvailable.length; j++) {
-                    String checkedCardValue = copyCardsAvailable[j].substring(1);
-                    checkedCardValue = checkedCardValue.replace("J", "11")
-                            .replace("Q", "12")
-                            .replace("K", "13")
-                            .replace("A", "14");
-                    int checkedCardValueInt = Integer.parseInt(checkedCardValue);
-
-                    if (checkedCardValueInt < smallest) {
-                        smallest = checkedCardValueInt;
-                        smallestIndex = j;
-                    }
+            for (int i = 0; i <= cardsAvailable.length - 5; i++) {
+                String[] cardsToDiscard = new String[i + 1];
+                for (int j = 0; j < i + 1; j++) {
+                    cardsToDiscard[j] = cardsAvailable[j];
                 }
 
-                discardedCards[i] = copyCardsAvailable[smallestIndex];
-
-                String[] handCard = { copyCardsAvailable[smallestIndex] };
-                possible_hands(discard_cards(copyCardsAvailable, discardedCards), handCard);
-
-                copyCardsAvailable = discard_cards(copyCardsAvailable, handCard);
+                String[] handCard = { cardsAvailable[i] };
+                possible_hands(discard_cards(cardsAvailable, cardsToDiscard), handCard);
             }
             return;
         } else {
-            // The last added card to cardsOnHands
-            String lastCard = cardsOnHands[cardsOnHands.length - 1];
-            // The card we are checking now
-            int smallest = 20;
-            int smallestIndex = 0;
-            for (int i = 0; i < cardsAvailable.length; i++) {
-                String checkedCardValue = cardsAvailable[i].substring(1);
-                checkedCardValue = checkedCardValue.replace("J", "11")
-                        .replace("Q", "12")
-                        .replace("K", "13")
-                        .replace("A", "14");
-                int checkedCardValueInt = Integer.parseInt(checkedCardValue);
-
-                if (checkedCardValueInt < smallest) {
-                    smallest = checkedCardValueInt;
-                    smallestIndex = i;
-                }
-            }
-
-            String checkedCard = cardsAvailable[smallestIndex];
-
             // Cards we want to remove from cardsAvailable
-            String[] cardToDiscard = { cardsAvailable[smallestIndex] };
+            String[] cardToDiscard = { cardsAvailable[0] };
 
             // Array of new cardsOnHand
             String[] onHand = new String[cardsOnHands.length + 1];
@@ -181,90 +148,167 @@ class Poker extends ArrayManipulation {
                 onHand[i] = cardsOnHands[i];
             }
             // Append the card we are checking now to our hand
-            onHand[cardsOnHands.length] = cardsAvailable[smallestIndex];
+            onHand[cardsOnHands.length] = cardsAvailable[0];
 
             // Always call this
+            possible_hands(discard_cards(cardsAvailable, cardToDiscard), onHand);
             possible_hands(discard_cards(cardsAvailable, cardToDiscard), cardsOnHands);
-
-            boolean allCardsSameColor = true;
-            for (int i = 0; i < cardsOnHands.length; i++) {
-                if (cardsOnHands[i].charAt(0) != checkedCard.charAt(0)) {
-                    allCardsSameColor = false;
-                    break;
-                }
-            }
-            // Check for possible flush
-            if (allCardsSameColor) {
-                possible_hands(discard_cards(cardsAvailable, cardToDiscard), onHand);
-                return;
-            }
-
-            // Check for row
-
-            // TODO Must check if the previous cards are either ascending or descending
-            int currentCard = Integer.parseInt(cardsOnHands[0].substring(1).replace("J", "11")
-                    .replace("Q", "12")
-                    .replace("K", "13")
-                    .replace("A", "14"));
-            boolean increasing = true;
-            boolean firstChecked = true;
-            for (int i = 1; i < cardsOnHands.length; i++) {
-                String checkedCardValue = cardsOnHands[i].substring(1);
-                checkedCardValue = checkedCardValue.replace("J", "11")
-                        .replace("Q", "12")
-                        .replace("K", "13")
-                        .replace("A", "14");
-                int checkedCardValueInt = Integer.parseInt(checkedCardValue);
-
-                if (firstChecked) {
-                    firstChecked = false;
-                    if (currentCard == checkedCardValueInt + 1) {
-                        increasing = false;
-                        currentCard = checkedCardValueInt;
-                    } else if (currentCard == checkedCardValueInt - 1) {
-                        increasing = true;
-                        currentCard = checkedCardValueInt;
-                    } else {
-                        return;
-                    }
-                } else {
-                    if (currentCard == checkedCardValueInt + 1 && !increasing) {
-                        currentCard = checkedCardValueInt;
-                    } else if (currentCard == checkedCardValueInt - 1 && increasing) {
-                        currentCard = checkedCardValueInt;
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-            String lastCardValue = lastCard.substring(1);
-            lastCardValue = lastCardValue.replace("J", "11")
-                    .replace("Q", "12")
-                    .replace("K", "13")
-                    .replace("A", "14");
-            int lastCardValueInt = Integer.parseInt(lastCardValue);
-
-            String checkedCardValue = checkedCard.substring(1);
-            checkedCardValue = checkedCardValue.replace("J", "11")
-                    .replace("Q", "12")
-                    .replace("K", "13")
-                    .replace("A", "14");
-            int checkedCardValueInt = Integer.parseInt(checkedCardValue);
-
-            if (lastCardValueInt == checkedCardValueInt - 1
-                    || lastCardValueInt == checkedCardValueInt + 1) {
-                possible_hands(discard_cards(cardsAvailable, cardToDiscard), onHand);
-                return;
-            }
         }
 
         // Write your code above
     }
 
+    public String[][] Nchoose3(String[] arr) {
+        int i = 0;
+        int j = 1;
+        int k = 2;
+
+        int nFactorial = 1;
+        int kFactorial = 1;
+        for (int l = arr.length; l > 3; l--) {
+            nFactorial *= l;
+        }
+        for (int l = arr.length - 3; l > 0; l--) {
+            kFactorial *= l;
+        }
+
+        int nChooseK = nFactorial / kFactorial;
+
+        String[][] result = new String[nChooseK][3];
+
+        int counter = 0;
+        while (i < arr.length - 2) {
+            while (j < arr.length - 1) {
+                while (k < arr.length) {
+                    String[] temp = new String[3];
+                    temp[0] = arr[i];
+                    temp[1] = arr[j];
+                    temp[2] = arr[k];
+                    result[counter] = temp;
+                    counter++;
+                    k++;
+                }
+                j++;
+                k = j + 1;
+            }
+            i++;
+            j = i + 1;
+            k = j + 1;
+        }
+
+        return result;
+    }
+
+    public String[][] Nchoose4(String[] arr) {
+        int i = 0;
+        int j = 1;
+        int k = 2;
+        int m = 3;
+
+        int nFactorial = 1;
+        int kFactorial = 1;
+        for (int l = arr.length; l > 4; l--) {
+            nFactorial *= l;
+        }
+        for (int l = arr.length - 4; l > 0; l--) {
+            kFactorial *= l;
+        }
+
+        int nChooseK = nFactorial / kFactorial;
+
+        String[][] result = new String[nChooseK][3];
+
+        int counter = 0;
+        while (i < arr.length - 3) {
+            while (j < arr.length - 2) {
+                while (k < arr.length - 1) {
+                    while (m < arr.length) {
+                        String[] temp = new String[4];
+                        temp[0] = arr[i];
+                        temp[1] = arr[j];
+                        temp[2] = arr[k];
+                        temp[3] = arr[m];
+                        result[counter] = temp;
+                        counter++;
+                        m++;
+                    }
+                    k++;
+                    m = k + 1;
+                }
+                j++;
+                k = j + 1;
+                m = k + 1;
+            }
+            i++;
+            j = i + 1;
+            k = j + 1;
+            m = k + 1;
+        }
+
+        return result;
+    }
+
     public void possible_hands_opponent(String[] cardsAvailable, String[] cardsOnCommunity, String[] cardsOnHands) {
         // Write your code below
 
+        cardsAvailable = discard_cards(cardsAvailable, cardsOnCommunity);
+
+        // Add to result
+        if (cardsOnHands.length == 5) {
+            String[][] newPlayerCombinations = new String[Poker.opponent_combinations.length + 1][5];
+            for (int i = 0; i < Poker.opponent_combinations.length; i++) {
+                newPlayerCombinations[i] = Poker.opponent_combinations[i];
+            }
+            newPlayerCombinations[newPlayerCombinations.length - 1] = cardsOnHands;
+
+            Poker.opponent_combinations = newPlayerCombinations;
+            return;
+        }
+        // Everything done
+        if (cardsAvailable.length == 0) {
+            return;
+        }
+        if (cardsOnHands.length == 0) {
+            String[][] allCombinations3 = Nchoose3(cardsOnCommunity);
+            String[][] allCombinations4 = Nchoose4(cardsOnCommunity);
+            String[][] allCombinations5 = new String[0][3];
+            if (cardsOnCommunity.length == 5) {
+                allCombinations5 = new String[1][3];
+                allCombinations5[0] = cardsOnCommunity;
+            }
+
+            for (int i = 0; i < allCombinations3.length; i++) {
+                possible_hands_opponent(cardsAvailable, cardsOnCommunity, allCombinations3[i]);
+            }
+            if (cardsOnCommunity.length == 3)
+                return;
+            for (int i = 0; i < allCombinations4.length; i++) {
+                possible_hands_opponent(cardsAvailable, cardsOnCommunity, allCombinations4[i]);
+            }
+            if (cardsOnCommunity.length == 4)
+                return;
+
+            for (int i = 0; i < allCombinations5.length; i++) {
+                possible_hands_opponent(cardsAvailable, cardsOnCommunity, allCombinations5[i]);
+            }
+
+            return;
+        } else {
+            // Cards we want to remove from cardsAvailable
+            String[] cardToDiscard = { cardsAvailable[0] };
+
+            // Array of new cardsOnHand
+            String[] onHand = new String[cardsOnHands.length + 1];
+            for (int i = 0; i < cardsOnHands.length; i++) {
+                onHand[i] = cardsOnHands[i];
+            }
+            // Append the card we are checking now to our hand
+            onHand[cardsOnHands.length] = cardsAvailable[0];
+
+            // Always call this
+            possible_hands_opponent(discard_cards(cardsAvailable, cardToDiscard), cardsOnCommunity, onHand);
+            possible_hands_opponent(discard_cards(cardsAvailable, cardToDiscard), cardsOnCommunity, cardsOnHands);
+        }
         // Write your code above
     }
 
