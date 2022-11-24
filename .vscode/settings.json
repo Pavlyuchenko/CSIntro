@@ -1,3 +1,8 @@
 {
-    "java.project.sourcePaths": ["game", "assignments/1", "assignments/5"]
+    "java.project.sourcePaths": [
+        "game",
+        "assignments/5",
+        "assignments/1",
+        "cs2/4"
+    ]
 }
