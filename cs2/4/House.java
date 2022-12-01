@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.geom.*;
 
 class HouseComponent extends JComponent {
+    @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         House h = new House(0, 0);
@@ -12,7 +13,6 @@ class HouseComponent extends JComponent {
         h.draw(g2);
         h2.draw(g2);
     }
-
 }
 
 public class House {
@@ -47,7 +47,6 @@ public class House {
         Line2D roof2 = new Line2D.Double();
         roof2.setLine(xLeft + 50, yTop, xLeft + 100, yTop + 45);
         g2.draw(roof2);
-
     }
 
     public static void main(String[] args) {

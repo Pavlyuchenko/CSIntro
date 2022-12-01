@@ -14,10 +14,13 @@ public class ButtonViewer {
 
         panel.add(button);
         panel.add(button2);
+
         ActionListener listener = new ClickListener();
         ActionListener listener2 = new ClickListener();
+
         button.addActionListener(listener);
         button2.addActionListener(listener2);
+
         frame.setContentPane(panel);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
