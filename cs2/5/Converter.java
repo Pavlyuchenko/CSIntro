@@ -35,7 +35,6 @@ public class Converter {
         combo2.addItem("£");
 
         JPanel panel3 = new JPanel();
-        panel2.setLayout(new FlowLayout());
 
         JButton button = new JButton("Convert");
 
